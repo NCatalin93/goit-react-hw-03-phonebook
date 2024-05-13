@@ -15,19 +15,36 @@ export class App extends Component {
     };
   }
 
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      console.log('renewed contacts');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   formSubmit = ({ name, number }) => {
     const contact = {
       id: nanoid(),
       name,
       number,
     };
-    this.state.contacts.some(
+
+    const enterContacts = this.state.contacts.some(
       i =>
-        (i.name.toLowerCase() === contact.name.toLowerCase() &&
+        (i.name === contact.name.toLowerCase() &&
           i.number === contact.number) ||
         i.number === contact.number
-    )
-      ? alert(`${name} is already in contacts`)
+    );
+    enterContacts
+      ? alert(`${name} or ${number} is already in contacts`)
       : this.setState(({ contacts }) => ({
           contacts: [contact, ...contacts],
         }));

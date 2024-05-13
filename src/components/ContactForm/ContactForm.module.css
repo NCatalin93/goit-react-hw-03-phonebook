@@ -12,6 +12,7 @@ label {
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .addName:hover {
